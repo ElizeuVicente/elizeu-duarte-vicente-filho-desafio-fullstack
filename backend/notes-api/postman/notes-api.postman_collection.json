@@ -223,6 +223,71 @@
         "header": [{ "key": "Content-Type", "value": "application/json" }],
         "body": "{\n  \"timestamp\": \"2026-10-29T21:33:32.695Z\",\n  \"status\": 404,\n  \"error\": \"Not Found\",\n  \"message\": \"Nota não encontrada: 00000000-0000-0000-0000-000000000000\",\n  \"path\": \"/api/v1/notes/00000000-0000-0000-0000-000000000000\"\n}"
       }]
+    },
+    {
+      "name": "Exportar notas em CSV",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "text/csv"
+          }
+        ],
+        "description": "Retorna todas as notas correspondentes aos filtros opcionais site, equipment, startDate e endDate (YYYY-MM-DD), sem paginação. O arquivo é UTF-8 e inclui cabeçalho, ID e os seis campos da nota. Datas em ordem invertida retornam HTTP 400.",
+        "url": {
+          "raw": "{{baseUrl}}/notes/export?site=Barros%2C%20Reis%20e%20Moraes&startDate=2024-01-01&endDate=2024-12-31",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "notes",
+            "export"
+          ],
+          "query": [
+            {
+              "key": "site",
+              "value": "Barros, Reis e Moraes"
+            },
+            {
+              "key": "startDate",
+              "value": "2024-01-01"
+            },
+            {
+              "key": "endDate",
+              "value": "2024-12-31"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "200 OK - download CSV",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/csv"
+              }
+            ],
+            "url": "{{baseUrl}}/notes/export?site=Barros%2C%20Reis%20e%20Moraes&startDate=2024-01-01&endDate=2024-12-31"
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "text/csv;charset=UTF-8"
+            },
+            {
+              "key": "Content-Disposition",
+              "value": "attachment; filename=\"notes-2026-10-30.csv\""
+            }
+          ],
+          "body": "id,site,equipment,variable,timestamp,author,message\r\n\"6492c8f7-2a93-455f-9117-8f4aff988ec8\",\"Barros, Reis e Moraes\",\"Gerador\",\"Tensão\",\"2024-08-01T18:48:37.381Z\",\"Márcia Albuquerque\",\"Ratione doloremque quidem. Amet qui itaque fugit laborum atque quo quas fugiat. Minus voluptas et aliquam laborum.\"\r\n"
+        }
+      ]
     }
   ]
 }
