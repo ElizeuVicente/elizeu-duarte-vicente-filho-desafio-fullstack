@@ -1,0 +1,1 @@
+Analise os endpoints que já foram implementados e gere exemplos de requisições para cada um, incluindo os JSONs de request, parâmetros e exemplos de resposta
