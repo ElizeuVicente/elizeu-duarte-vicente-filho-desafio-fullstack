@@ -84,6 +84,18 @@
 	</dependencies>
 
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+			<resource>
+				<directory>${project.basedir}/../../materials/Oxyn - Desafio Full Stack/materials</directory>
+				<includes>
+					<include>notes.csv</include>
+				</includes>
+				<targetPath>seed</targetPath>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
