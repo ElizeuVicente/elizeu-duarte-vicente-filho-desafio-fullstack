@@ -11,6 +11,7 @@ import com.oxyn.notes_api.note.dto.request.NoteRequestDto;
 import com.oxyn.notes_api.note.dto.response.NoteResponseDto;
 import com.oxyn.notes_api.note.usecase.CreateNoteUseCase;
 import com.oxyn.notes_api.note.usecase.DeleteNoteUseCase;
+import com.oxyn.notes_api.note.usecase.ExportNotesUseCase;
 import com.oxyn.notes_api.note.usecase.GetNoteUseCase;
 import com.oxyn.notes_api.note.usecase.ListNotesUseCase;
 import com.oxyn.notes_api.note.usecase.UpdateNoteUseCase;
@@ -25,6 +26,7 @@ public class NoteService {
     private final GetNoteUseCase getNoteUseCase;
     private final UpdateNoteUseCase updateNoteUseCase;
     private final DeleteNoteUseCase deleteNoteUseCase;
+    private final ExportNotesUseCase exportNotesUseCase;
 
     public NoteResponseDto create(NoteRequestDto request) {
         return createNoteUseCase.execute(request);
@@ -44,5 +46,9 @@ public class NoteService {
 
     public void delete(UUID id) {
         deleteNoteUseCase.execute(id);
+    }
+
+    public String export(String site, String equipment, LocalDate startDate, LocalDate endDate) {
+        return exportNotesUseCase.execute(site, equipment, startDate, endDate);
     }
 }
