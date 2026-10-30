@@ -1,0 +1,228 @@
+{
+  "info": {
+    "_postman_id": "c9293bcc-16e3-4e03-96c5-10a2687c3d04",
+    "name": "Notes API",
+    "description": "Execute 'Criar nota' antes de buscar, atualizar ou excluir: ela salva o ID retornado em {{noteId}}. O corpo de POST e PUT exige site (max. 150), equipment (max. 100), variable (max. 100), timestamp ISO-8601, author (max. 150) e message; todos são obrigatórios e não podem estar em branco.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080/api/v1" },
+    { "key": "noteId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Listar notas paginadas",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/notes?page=0&size=20",
+          "host": ["{{baseUrl}}"],
+          "path": ["notes"],
+          "query": [{ "key": "page", "value": "0" }, { "key": "size", "value": "20" }]
+        }
+      },
+      "response": [{
+        "name": "200 OK - página de notas",
+        "originalRequest": { "method": "GET", "header": [], "url": "{{baseUrl}}/notes?page=0&size=20" },
+        "status": "OK", "code": 200,
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": "{\n  \"content\": [\n    {\n      \"id\": \"e0b871c6-1896-41d1-8040-c5dfc21aa2ed\",\n      \"site\": \"Usina Norte\",\n      \"equipment\": \"Gerador 01\",\n      \"variable\": \"Temperatura\",\n      \"timestamp\": \"2024-01-15T10:30:00Z\",\n      \"author\": \"Maria Silva\",\n      \"message\": \"Temperatura estabilizada após inspeção.\"\n    }\n  ],\n  \"totalElements\": 1,\n  \"totalPages\": 1,\n  \"size\": 20,\n  \"number\": 0,\n  \"first\": true,\n  \"last\": true,\n  \"empty\": false\n}"
+      }]
+    },
+    {
+      "name": "Listar notas com filtros",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/notes?site=Usina%20Norte&equipment=Gerador%2001&startDate=2024-01-01&endDate=2024-01-31&page=0&size=10",
+          "host": ["{{baseUrl}}"],
+          "path": ["notes"],
+          "query": [
+            { "key": "site", "value": "Usina Norte" },
+            { "key": "equipment", "value": "Gerador 01" },
+            { "key": "startDate", "value": "2024-01-01" },
+            { "key": "endDate", "value": "2024-01-31" },
+            { "key": "page", "value": "0" },
+            { "key": "size", "value": "10" }
+          ]
+        }
+      },
+      "response": [{
+        "name": "200 OK - filtros combinados",
+        "originalRequest": { "method": "GET", "header": [], "url": "{{baseUrl}}/notes?site=Usina%20Norte&equipment=Gerador%2001&startDate=2024-01-01&endDate=2024-01-31&page=0&size=10" },
+        "status": "OK", "code": 200,
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": "{\n  \"content\": [\n    {\n      \"id\": \"e0b871c6-1896-41d1-8040-c5dfc21aa2ed\",\n      \"site\": \"Usina Norte\",\n      \"equipment\": \"Gerador 01\",\n      \"variable\": \"Temperatura\",\n      \"timestamp\": \"2024-01-15T10:30:00Z\",\n      \"author\": \"Maria Silva\",\n      \"message\": \"Temperatura estabilizada após inspeção.\"\n    }\n  ],\n  \"totalElements\": 1,\n  \"totalPages\": 1,\n  \"size\": 10,\n  \"number\": 0\n}"
+      }]
+    },
+    {
+      "name": "Listar notas - filtro sem resultados",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/notes?site=Site%20Inexistente&page=0&size=10",
+          "host": ["{{baseUrl}}"],
+          "path": ["notes"],
+          "query": [
+            { "key": "site", "value": "Site Inexistente" },
+            { "key": "page", "value": "0" },
+            { "key": "size", "value": "10" }
+          ]
+        }
+      },
+      "response": [{
+        "name": "200 OK - nenhuma nota encontrada",
+        "originalRequest": { "method": "GET", "header": [], "url": "{{baseUrl}}/notes?site=Site%20Inexistente&page=0&size=10" },
+        "status": "OK", "code": 200,
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": "{\n  \"content\": [],\n  \"empty\": true,\n  \"first\": true,\n  \"last\": true,\n  \"number\": 0,\n  \"numberOfElements\": 0,\n  \"pageable\": {\n    \"offset\": 0,\n    \"pageNumber\": 0,\n    \"pageSize\": 10,\n    \"paged\": true\n  },\n  \"size\": 10,\n  \"totalElements\": 0,\n  \"totalPages\": 0\n}"
+      }]
+    },
+    {
+      "name": "Listar notas - paginação inválida",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/notes?page=0&size=101",
+          "host": ["{{baseUrl}}"],
+          "path": ["notes"],
+          "query": [{ "key": "page", "value": "0" }, { "key": "size", "value": "101" }]
+        }
+      },
+      "response": [{
+        "name": "400 Bad Request",
+        "originalRequest": { "method": "GET", "header": [], "url": "{{baseUrl}}/notes?page=0&size=101" },
+        "status": "Bad Request", "code": 400,
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": "{\n  \"timestamp\": \"2026-10-29T21:33:32.695Z\",\n  \"status\": 400,\n  \"error\": \"Bad Request\",\n  \"message\": \"page must be at least 0 and size must be between 1 and 100\",\n  \"path\": \"/api/v1/notes\"\n}"
+      }]
+    },
+    {
+      "name": "Criar nota",
+      "event": [{
+        "listen": "test",
+        "script": {
+          "type": "text/javascript",
+          "exec": [
+            "pm.test(\"Status 201 Created\", function () { pm.response.to.have.status(201); });",
+            "pm.collectionVariables.set(\"noteId\", pm.response.json().id);"
+          ]
+        }
+      }],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"site\": \"Usina Norte\",\n  \"equipment\": \"Gerador 01\",\n  \"variable\": \"Temperatura\",\n  \"timestamp\": \"2024-01-15T10:30:00Z\",\n  \"author\": \"Maria Silva\",\n  \"message\": \"Temperatura estabilizada após inspeção.\"\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": { "raw": "{{baseUrl}}/notes", "host": ["{{baseUrl}}"], "path": ["notes"] }
+      },
+      "response": [{
+        "name": "201 Created",
+        "originalRequest": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": "{{baseUrl}}/notes" },
+        "status": "Created", "code": 201,
+        "header": [{ "key": "Location", "value": "/api/v1/notes/e0b871c6-1896-41d1-8040-c5dfc21aa2ed" }, { "key": "Content-Type", "value": "application/json" }],
+        "body": "{\n  \"id\": \"e0b871c6-1896-41d1-8040-c5dfc21aa2ed\",\n  \"site\": \"Usina Norte\",\n  \"equipment\": \"Gerador 01\",\n  \"variable\": \"Temperatura\",\n  \"timestamp\": \"2024-01-15T10:30:00Z\",\n  \"author\": \"Maria Silva\",\n  \"message\": \"Temperatura estabilizada após inspeção.\"\n}"
+      }]
+    },
+    {
+      "name": "Criar nota - dados inválidos",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"site\": \"\",\n  \"equipment\": \"\",\n  \"variable\": \"\",\n  \"author\": \"\",\n  \"message\": \"\"\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": { "raw": "{{baseUrl}}/notes", "host": ["{{baseUrl}}"], "path": ["notes"] }
+      },
+      "response": [{
+        "name": "400 Bad Request - falha de validação",
+        "originalRequest": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": "{{baseUrl}}/notes" },
+        "status": "Bad Request", "code": 400,
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": "{\n  \"timestamp\": \"2026-10-29T21:33:32.695Z\",\n  \"status\": 400,\n  \"error\": \"Bad Request\",\n  \"message\": \"Dados inválidos\",\n  \"path\": \"/api/v1/notes\",\n  \"fieldErrors\": [\n    { \"field\": \"author\", \"message\": \"must not be blank\" },\n    { \"field\": \"equipment\", \"message\": \"must not be blank\" },\n    { \"field\": \"message\", \"message\": \"must not be blank\" },\n    { \"field\": \"site\", \"message\": \"must not be blank\" },\n    { \"field\": \"timestamp\", \"message\": \"must not be null\" },\n    { \"field\": \"variable\", \"message\": \"must not be blank\" }\n  ]\n}"
+      }]
+    },
+    {
+      "name": "Buscar nota por ID",
+      "request": { "method": "GET", "header": [], "url": { "raw": "{{baseUrl}}/notes/{{noteId}}", "host": ["{{baseUrl}}"], "path": ["notes", "{{noteId}}"] } },
+      "response": [{
+        "name": "200 OK",
+        "originalRequest": { "method": "GET", "header": [], "url": "{{baseUrl}}/notes/{{noteId}}" },
+        "status": "OK", "code": 200,
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": "{\n  \"id\": \"e0b871c6-1896-41d1-8040-c5dfc21aa2ed\",\n  \"site\": \"Usina Norte\",\n  \"equipment\": \"Gerador 01\",\n  \"variable\": \"Temperatura\",\n  \"timestamp\": \"2024-01-15T10:30:00Z\",\n  \"author\": \"Maria Silva\",\n  \"message\": \"Temperatura estabilizada após inspeção.\"\n}"
+      }, {
+        "name": "404 Not Found",
+        "originalRequest": { "method": "GET", "header": [], "url": "{{baseUrl}}/notes/00000000-0000-0000-0000-000000000000" },
+        "status": "Not Found", "code": 404,
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": "{\n  \"timestamp\": \"2026-10-29T21:33:32.695Z\",\n  \"status\": 404,\n  \"error\": \"Not Found\",\n  \"message\": \"Nota não encontrada: 00000000-0000-0000-0000-000000000000\",\n  \"path\": \"/api/v1/notes/00000000-0000-0000-0000-000000000000\"\n}"
+      }]
+    },
+    {
+      "name": "Atualizar nota",
+      "request": {
+        "method": "PUT",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"site\": \"Usina Norte\",\n  \"equipment\": \"Gerador 01\",\n  \"variable\": \"Temperatura\",\n  \"timestamp\": \"2024-01-15T11:00:00Z\",\n  \"author\": \"Maria Silva\",\n  \"message\": \"Temperatura normalizada e equipamento liberado.\"\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": { "raw": "{{baseUrl}}/notes/{{noteId}}", "host": ["{{baseUrl}}"], "path": ["notes", "{{noteId}}"] }
+      },
+      "response": [{
+        "name": "200 OK",
+        "originalRequest": { "method": "PUT", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": "{{baseUrl}}/notes/{{noteId}}" },
+        "status": "OK", "code": 200,
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": "{\n  \"id\": \"e0b871c6-1896-41d1-8040-c5dfc21aa2ed\",\n  \"site\": \"Usina Norte\",\n  \"equipment\": \"Gerador 01\",\n  \"variable\": \"Temperatura\",\n  \"timestamp\": \"2024-01-15T11:00:00Z\",\n  \"author\": \"Maria Silva\",\n  \"message\": \"Temperatura normalizada e equipamento liberado.\"\n}"
+      }]
+    },
+    {
+      "name": "Atualizar nota - dados inválidos",
+      "request": {
+        "method": "PUT",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"site\": \"\",\n  \"equipment\": \"Gerador 01\",\n  \"variable\": \"Temperatura\",\n  \"timestamp\": null,\n  \"author\": \"Maria Silva\",\n  \"message\": \"\"\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": { "raw": "{{baseUrl}}/notes/{{noteId}}", "host": ["{{baseUrl}}"], "path": ["notes", "{{noteId}}"] }
+      },
+      "response": [{
+        "name": "400 Bad Request - falha de validação",
+        "originalRequest": { "method": "PUT", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": "{{baseUrl}}/notes/{{noteId}}" },
+        "status": "Bad Request", "code": 400,
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": "{\n  \"timestamp\": \"2026-10-29T21:33:32.695Z\",\n  \"status\": 400,\n  \"error\": \"Bad Request\",\n  \"message\": \"Dados inválidos\",\n  \"path\": \"/api/v1/notes/{{noteId}}\",\n  \"fieldErrors\": [\n    { \"field\": \"message\", \"message\": \"must not be blank\" },\n    { \"field\": \"site\", \"message\": \"must not be blank\" },\n    { \"field\": \"timestamp\", \"message\": \"must not be null\" }\n  ]\n}"
+      }]
+    },
+    {
+      "name": "Excluir nota",
+      "request": { "method": "DELETE", "header": [], "url": { "raw": "{{baseUrl}}/notes/{{noteId}}", "host": ["{{baseUrl}}"], "path": ["notes", "{{noteId}}"] } },
+      "response": [{
+        "name": "204 No Content",
+        "originalRequest": { "method": "DELETE", "header": [], "url": "{{baseUrl}}/notes/{{noteId}}" },
+        "status": "No Content", "code": 204,
+        "header": [], "body": ""
+      }, {
+        "name": "404 Not Found",
+        "originalRequest": { "method": "DELETE", "header": [], "url": "{{baseUrl}}/notes/00000000-0000-0000-0000-000000000000" },
+        "status": "Not Found", "code": 404,
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": "{\n  \"timestamp\": \"2026-10-29T21:33:32.695Z\",\n  \"status\": 404,\n  \"error\": \"Not Found\",\n  \"message\": \"Nota não encontrada: 00000000-0000-0000-0000-000000000000\",\n  \"path\": \"/api/v1/notes/00000000-0000-0000-0000-000000000000\"\n}"
+      }]
+    }
+  ]
+}
