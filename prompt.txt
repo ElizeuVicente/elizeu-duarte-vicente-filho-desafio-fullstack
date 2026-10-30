@@ -1,1 +1,5 @@
 Analise os endpoints que já foram implementados e gere exemplos de requisições para cada um, incluindo os JSONs de request, parâmetros e exemplos de resposta
+Preciso que a tela notes-screen.tsx seja responsiva para telas menores, análise a tela e ajuste a responsividade dela
+Preciso que a o BFF seja integrado a api Spring Java, analise os enpoints existentes no backend e integre a funções do backend
+Analise o desing proposto dentro da pasta materials e acerte os pontos pendentes no exemplo do PDF
+Divida em partes os commits do projeto seguindo o padrão Conventional Commits Pattern
